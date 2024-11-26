@@ -12,7 +12,7 @@
 
 ## Correct order of operations
 
-**How to generate SSH keys for secure authentication with GitHub?**
+**How to generate SSH keys on your PC for secure authentication with GitHub?**
 
 1. Navigate to your SSH directory like so: ```cd ~/.ssh```.
 2. Remove any existing ssh keys which are the ```id_*******``` and ```id_*******.pub``` or ```id_rsa``` and ```id_rsa.pub``` files inside of the .ssh directory.
@@ -30,6 +30,26 @@
 14. Test the SSH connection like so ```ssh -T git@github.com```.
 15. Then you should see a message like ```Hi username! You've successfully authenticated, but GitHub does not provide shell access.```.
 16. Done.
+
+**How to set up production on a web host for live deployment?**
+
+1. SSH into your live server.
+2. In your ```home/username/``` directory, create a folder where your repository will be located in. The name of this folder can be anything. (do not put the folder into public_html or any web-accessible directory)
+3. Then go into this new folder and run the following command to initialize a bare repository: ```git init --bare repositoryName.git```. The name of this repository can be anything.
+4. Go into your repository and then go into the generated ```hooks``` folder.
+5. Run the following command: ```nano post-receive```. This will create a file called ```post-receive```. This file will not have or need an extension.
+6. Paste the code below into the file and replace ```/home/username/public_html``` with the path to your web-accessible directory. Then save and exit the file. This also excludes the ```.gitignore``` file from being uploaded to your web-accessible directory.
+	```
+	#!/bin/bash
+	GIT_WORK_TREE=/home/username/public_html
+	export GIT_WORK_TREE
+	git checkout -f master -- . ':!.gitignore'
+	```
+7. Make the file executable by running the following command: ```chmod +x post-receive```. You may now close the connection to your server.
+8. Open your local terminal and navigate to your local project directory.
+9. Run the following command to add the live repository to your local project: ```git remote add production ssh://user@your-server-ip:port/home/username/repo/repositoryName.git```. Replace what's necessary with your credentials.
+10. To upload your master branch to your live website, run the following command: ```git push production master```.
+11. Done.
 
 **How to initialize a folder with an existing remote repository?**
 
@@ -448,7 +468,7 @@ Show branch in terminal PS (process status). Paste the following into the ```.ba
 
 ```shell
 function parse_git_repo {
-   git rev-parse --show-toplevel 2>/dev/null | xargs basename
+	git rev-parse --show-toplevel 2>/dev/null | xargs basename
 }
 
 function parse_git_branch {
