@@ -1,6 +1,6 @@
 # GitHub/Git/Terminal commands
 
-- [Correct order of operations](#correct-order-of-operations "Go to section")
+- [Tutorials](#tutorials "Go to section")
 - [Navigation](#navigation "Go to section")
 - [Repository](#repository "Go to section")
 - [Branch](#branch "Go to section")
@@ -10,9 +10,9 @@
 - [Nano text editor](#nano-text-editor "Go to section")
 - [Defaults](#defaults "Go to section")
 
-## Correct order of operations
+## Tutorials
 
-**How to generate SSH keys on your PC for secure authentication with GitHub?**
+**How to generate SSH keys on your pc for secure authentication with GitHub?**
 
 1. Navigate to your SSH directory like so: ```cd ~/.ssh```.
 2. Remove any existing ssh keys which are the ```id_*******``` and ```id_*******.pub``` or ```id_rsa``` and ```id_rsa.pub``` files inside of the .ssh directory.
@@ -30,6 +30,56 @@
 14. Test the SSH connection like so ```ssh -T git@github.com```.
 15. Then you should see a message like ```Hi username! You've successfully authenticated, but GitHub does not provide shell access.```.
 16. Done.
+<br><br>
+
+**How to generate SSH keys on your pc for secure authentication with your webhost?**
+
+If you already have an SSH key for GitHub for example, you can reuse that public key for your webhost aswell.
+
+1. Execute the following command: ```ssh-keygen -t rsa -b 4096 -C "yourEmail@gmail.com" -f ~/.ssh/id_rsa_custom_name```.
+2. Press enter to accept the default file location.
+3. You can enter a password for extra protection if you would like to.
+4. Add the SSH key to the SSH agent by running the following command: ```eval "$(ssh-agent -s)"```.
+5. Add your SSH private key to the agent by running the following command: ```ssh-add ~/.ssh/id_rsa_custom_name```.
+6. Add the public key ```~/.ssh/id_rsa_custom_name.pub``` to your webhost.<br>
+If you want to create a custom profile for easier SSH login, then follow steps 7 and 8, otherwise skip these steps.
+7. Edit the SSH config file with the following command: ```nano ~/.ssh/config``` and paste the following code. Replace what's necessary with your credentials.
+```
+Host yourdomain.com
+	HostName yourdomain.com
+	User yourCPanelUsername
+	Port 0000
+	IdentityFile ~/.ssh/id_rsa_custom_name
+```
+8. Now you can SSH into your webhost by running the following command: ```ssh yourdomain.com```.
+9. Done, you can now SSH into your webhost with an SSH key and without a password by starting an SSH connection your usual way ```ssh -p port username@yourdomain.com```.
+<br><br>
+
+**How to Initialize a GitHub Repository for an Existing Project & create a .gitignore?**
+
+1. Create a new repository on GitHub without a README.md.
+2. Initialize Git in your project's local directory with ```git init```.
+3. Temporarily move any config or environment variables outside of your project if you would not like these to be uploaded aswell.
+4. Create a ```.gitignore``` file in your project's local main directory.
+5. Include all paths/files in this file that you would like Git to ignore so that they stay offline like so:
+	```shell
+	.env
+	php/config.php
+	js/general/data.js
+	```
+6. Stage your files with ```git add .```.
+7. Commit your files with ```git commit -m "Initial commit"```.
+8. Link your local repository to your GitHub repository and replace ```username``` with your GitHub username and ```repository-name``` with your online repository's name. Run the following command: ```git remote add origin https://github.com/username/repository-name.git```.
+9. Push your local commits to GitHub with ```git push -u origin master```. You can name your main branch anything, in this case it's ```master```.
+10. Put your ignored files back into your local project and they will stay offline.
+11. Done.
+<br><br>
+
+**How to move your progress/changes into a new branch?**
+
+1. With ```git stash``` you can temporarily "stash" your changes from your current branch.
+2. Then with ```git stash branch new-branch-name``` you can put the changes into a new branch and the stash will get deleted automatically.
+<br><br>
 
 **How to set up production on a web host for live deployment?**
 
@@ -50,11 +100,13 @@
 9. Run the following command to add the live repository to your local project: ```git remote add production ssh://user@your-server-ip:port/home/username/repo/repositoryName.git```. Replace what's necessary with your credentials.
 10. To upload your master branch to your live website, run the following command: ```git push production master```.
 11. Done.
+<br><br>
 
 **How to initialize a folder with an existing remote repository?**
 
 1. Use [```git clone```](#cloneCommand "Go to command") to clone a repository into your current folder by copying their SSH url which looks something like ```git@github.com:username/repository.git```.
 2. Done.
+<br><br>
 
 **How to upload changes from your current branch to your remote repository?**
 
@@ -70,6 +122,7 @@
 10. Delete merged branch locally with [```git branch -d```](#deleteLocalBranchCommand "Go to command") and remotely with [```git push origin --delete```](#deleteRemoteBranchCommand "Go to command").
 11. Create a pull request on GitHub to merge your current branch into the remote main (or master) branch.
 12. Done.
+<br><br>
 
 **How to delete a file from the local & remote repository?**
 
@@ -110,6 +163,18 @@ Edit in terminal.
 
 ```shell
 nano ./myFile.txt
+```
+
+Create a directory
+
+```shell
+mkdir myFolder
+```
+
+Create a file
+
+```shell
+touch myFile.txt
 ```
 
 Check status of staged files.
