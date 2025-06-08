@@ -1,3 +1,95 @@
+# GitSheet: A Comprehensive Git & Terminal Command Reference
+
+## What is GitSheet?
+
+GitSheet is a curated, easy-to-navigate reference for essential Git, GitHub, and terminal commands. It’s designed to help developers quickly find the right command for common version control and workflow tasks, from repository setup to advanced branching and deployment. The project also includes practical tutorials for real-world scenarios, such as SSH key management and live deployment.
+
+## Why I Built This Project
+
+As a developer, I often found myself searching for the same Git commands and best practices, especially when switching between projects or onboarding new team members. I built GitSheet to solve this problem: to have a single, reliable resource that covers not just the commands, but also the context and reasoning behind them. It’s meant to save time, reduce mistakes, and help others ramp up quickly with Git and terminal workflows.
+
+## Technologies & Tools Used
+
+- **Markdown** for clear, portable documentation
+- **Git** and **GitHub** for version control and collaboration
+- **Shell scripting** for advanced configuration and automation examples
+- **Nano** and **VS Code** as featured editors in workflow examples
+
+## Key Features & Code Examples
+
+### 1. Step-by-Step Tutorials
+
+The project includes detailed, copy-paste-ready tutorials for common and advanced tasks. For example, generating SSH keys for GitHub:
+
+```shell
+ssh-keygen -t ed25519 -C "your-email@gmail.com"
+eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/id_ed25519
+cat ~/.ssh/id_ed25519.pub
+```
+
+### 2. Command Reference with Explanations
+
+Every major Git operation is covered, with concise explanations and real command examples:
+
+```shell
+git clone https://github.com/username/repository.git .
+git status
+git branch
+git checkout -b new-branch-name
+git add .
+git commit -m "Initial commit"
+git push -u origin master
+```
+
+### 3. Advanced Workflow Tips
+
+The documentation goes beyond basics, including deployment and branch management:
+
+```shell
+# Initialize a bare repository for live deployment
+ssh user@your-server-ip
+cd /home/username/
+git init --bare repositoryName.git
+
+# Example post-receive hook for auto-deployment
+#!/bin/bash
+GIT_WORK_TREE=/home/username/public_html
+export GIT_WORK_TREE
+git checkout -f master -- . ':!.gitignore'
+```
+
+### 4. Editor Shortcuts and Customization
+
+Quick reference for using Nano and setting up your preferred editor:
+
+```shell
+git config --global core.editor "code --wait"
+git config --global core.editor "nano"
+```
+
+### 5. Shell Prompt Customization
+
+For power users, GitSheet includes shell prompt customization to show the current repo and branch:
+
+```shell
+function parse_git_repo {
+	git rev-parse --show-toplevel 2>/dev/null | xargs basename
+}
+
+function parse_git_branch {
+	git branch 2>/dev/null | sed -n '/\* /s///p'
+}
+
+PS1="$(if git rev-parse --is-inside-work-tree &>/dev/null; then echo \"$(parse_git_repo)/\033[0;36m$(parse_git_branch)\033[0m\"; else echo \"\w\"; fi)> "
+```
+
+## What Have I Learned?
+
+Building GitSheet deepened my understanding of Git’s inner workings and the value of clear, actionable documentation. I learned how to distill complex workflows into simple, repeatable steps, and how to anticipate the needs of both beginners and experienced developers. This project also reinforced the importance of automation and customization in developer productivity.
+
+If you’d like to know more about the project, feel free to reach out!
+
 # GitHub/Git/Terminal commands
 
 - [Tutorials](#tutorials "Go to section")
